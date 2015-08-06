@@ -6,10 +6,11 @@ module EnumField
   autoload :Version, 'enum_field/version'
   
   class BadId < StandardError
+    attr_reader :repeated_id
+
     def initialize(repeated_id)
       @repeated_id = repeated_id
     end
-    attr_reader :repeated_id
   end
 
   class RepeatedId < StandardError; end
@@ -17,5 +18,3 @@ module EnumField
   class InvalidOptions < StandardError; end
   class ObjectNotFound < StandardError; end
 end
-
-require 'enum_field/railtie' if defined?(Rails)

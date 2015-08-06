@@ -17,10 +17,14 @@ module EnumField
   # For instance:
   # <tt>
   # class User
+  #   extend EnumField::EnumeratedAttribute
+  #
   #   has_many_enumerated_attributes :roles, :through  => UserRole
   # end
   #
   # class UserRole < ActiveRecord::Base
+  #   extend EnumField::EnumeratedAttribute
+  #
   #   belongs_to :user
   #   enumerated_attribute :role
   # end

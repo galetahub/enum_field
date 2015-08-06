@@ -1,6 +1,9 @@
 # encoding: utf-8
 module EnumField
   class Builder
+
+    METHODS = [:all, :names, :find_by_id, :find, :first, :last]
+
     def initialize(target)
       @target = target
       @next_id = 0
@@ -30,7 +33,18 @@ module EnumField
     end
 
     def find_by_id(id)
-      @id2obj[id.to_i]
+      case id
+      when Integer, String, Float, Fixnum then 
+        @id2obj[id.to_i]
+      when Array then 
+        id.inject([]) do |items, value|
+          if value && value.respond_to?(:to_i)
+            items << @id2obj[value.to_i]
+          end
+
+          items
+        end
+      end
     end
 
     def first; @sorted.first; end

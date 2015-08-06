@@ -2,8 +2,7 @@
 module EnumField
   module DefineEnum
     def self.included(base)
-      base.send :include, InstanceMethods
-      base.send :extend,  ClassMethods
+      base.send :extend, ClassMethods
     end
       
     module ClassMethods
@@ -17,17 +16,12 @@ module EnumField
         @enum_builder ||= EnumField::Builder.new(self)
         yield @enum_builder
 
-        [:all, :names, :find_by_id, :find, :first, :last].each do |method|
-          instance_eval <<-END
-            def #{method}(*args, &block)
-              @enum_builder.send(:#{method}, *args, &block)
-            end
-          END
+        EnumField::Builder::METHODS.each do |method|
+          define_singleton_method method do |*args, &block|
+            @enum_builder.send(method, *args, &block)
+          end
         end
       end
-    end
-    
-    module InstanceMethods
     end
   end
 end

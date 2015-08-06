@@ -42,6 +42,8 @@ If you are not confortable with any of this options, maybe +enum_field+ is an an
   end
 
   class User < ActiveRecord::Base
+    extend EnumField::EnumeratedAttribute
+
     # in the database table there is a role_id integer column
     enumerated_attribute :role
   end
@@ -65,9 +67,9 @@ Your enum classes can have all the methods you need:
     attr_reader :name
 
     define_enum do |b|
-      b.member :home,       :object => PhoneType.new('home')
-      b.member :commercial, :object => PhoneType.new('commercial')
-      b.member :mobile,     :object => PhoneType.new('mobile')
+      b.member :home,       :object => new('home')
+      b.member :commercial, :object => new('commercial')
+      b.member :mobile,     :object => new('mobile')
     end
   end
 
@@ -84,6 +86,8 @@ You have some +AR+ like methods in enum classes
   PhoneType.find(2) == PhoneType.commercial
   PhoneType.find(123456)  # will raise
 
+  PhoneType.find([1, 2]) == [PhoneType.home, PhoneType.commercial]
+
 The library also mimics has_many :through behavior, for cases such as:
 
   class Role
@@ -97,10 +101,14 @@ The library also mimics has_many :through behavior, for cases such as:
   end
 
   class User
+    extend EnumField::EnumeratedAttribute
+
     has_many_enumerated_attributes :roles, :through  => UserRole
   end
 
   class UserRole < ActiveRecord::Base
+    extend EnumField::EnumeratedAttribute
+    
     belongs_to :user
     enumerated_attribute :role
   end
