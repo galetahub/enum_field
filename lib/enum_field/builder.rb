@@ -15,6 +15,7 @@ module EnumField
     def member(name, options = {})
       obj, candidate_id = process_options(options)
       assign_id(obj, candidate_id)
+      assign_name(obj, name)
       define_in_meta(name) { obj }
       save(name, obj)
       obj.freeze
@@ -34,9 +35,9 @@ module EnumField
 
     def find_by_id(id)
       case id
-      when Integer, String, Float, Fixnum then 
+      when Integer, String, Float, Fixnum then
         @id2obj[id.to_i]
-      when Array then 
+      when Array then
         id.inject([]) do |items, value|
           if value && value.respond_to?(:to_i)
             items << @id2obj[value.to_i]
@@ -60,6 +61,10 @@ module EnumField
     def assign_id(obj, candidate_id)
       id = new_id(candidate_id)
       obj.instance_variable_set(:@id, id)
+    end
+
+    def assign_name(obj, name)
+      obj.instance_variable_set(:@name, name)
     end
 
     def new_id(candidate)

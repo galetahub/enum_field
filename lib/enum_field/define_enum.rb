@@ -4,11 +4,11 @@ module EnumField
     def self.included(base)
       base.send :extend, ClassMethods
     end
-      
+
     module ClassMethods
       def self.extended(base)
         base.class_eval do
-          attr_reader :id
+          attr_reader :id, :name
         end
       end
 

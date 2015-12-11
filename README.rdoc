@@ -7,6 +7,10 @@
 Enables Active Record attributes to point to enum like objects, by saving in your database
 only an integer ID.
 
+== INSTALL:
+
+  gem 'galetahub-enum_field', require: 'enum_field'
+
 
 == FEATURES:
 
@@ -27,7 +31,7 @@ several options.
 * You can use a string to identify, for instance, the role.
 * You can use an id to identify the role.
 
-If you are not confortable with any of this options, maybe +enum_field+ is an answer for you.
+If you are not comfortable with any of this options, maybe +enum_field+ is an answer for you.
 
 == BASIC USAGE:
 
@@ -53,6 +57,9 @@ If you are not confortable with any of this options, maybe +enum_field+ is an an
 
   user.role = Role.manager
   user.role_id == Role.manager.id  #will be true
+
+  Role.manager.name # :manager
+  user.role.name # :manager
 
   User.first.role.id == User.first.role_id  #will be true
 
@@ -108,7 +115,7 @@ The library also mimics has_many :through behavior, for cases such as:
 
   class UserRole < ActiveRecord::Base
     extend EnumField::EnumeratedAttribute
-    
+
     belongs_to :user
     enumerated_attribute :role
   end
@@ -128,11 +135,6 @@ The library also mimics has_many :through behavior, for cases such as:
 == REQUIREMENTS:
 
 * activerecord
-
-
-== INSTALL:
-
-  gem 'galetahub-enum_field', :require => 'enum_field'
 
 == LICENSE:
 
