@@ -4,7 +4,7 @@ module EnumField
   autoload :Builder, 'enum_field/builder'
   autoload :EnumeratedAttribute, 'enum_field/enumerated_attribute'
   autoload :Version, 'enum_field/version'
-  
+
   class BadId < StandardError
     attr_reader :repeated_id
 

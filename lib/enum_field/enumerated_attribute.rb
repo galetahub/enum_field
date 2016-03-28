@@ -41,7 +41,7 @@ module EnumField
     #    * +class+: the class that will be instantiated when +name_attribute+ method is called. Defaults to
     #      +name_attribute+ in camelcase form.
     #
-    def enumerated_attribute(name_attribute, options  = {})
+    def enumerated_attribute(name_attribute, options = {})
       id_attribute = (options[:id_attribute] || "#{name_attribute}_id").to_sym
       klass = options[:class] || (options[:class_name] || name_attribute).to_s.camelcase.constantize
 
@@ -72,7 +72,7 @@ module EnumField
       association_ids = association.to_s.singularize + '_ids'
       has_many_aux = through.demodulize.underscore.pluralize
 
-      has_many has_many_aux, {:class_name => through, :dependent => :destroy}
+      has_many has_many_aux, { :class_name => through, :dependent => :destroy }
 
       define_method(association) do
         self.send(has_many_aux).map(&enum_attr.to_sym)
@@ -83,7 +83,7 @@ module EnumField
       end
 
       define_method(association_ids) do
-         self.send(association).map(&:id)
+        self.send(association).map(&:id)
       end
 
       define_method(association_ids + '=') do |values|

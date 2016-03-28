@@ -1,8 +1,9 @@
 # encoding: utf-8
 module EnumField
   class Builder
+    METHODS = %w(all names find_by_id find first last).freeze
 
-    METHODS = [:all, :names, :find_by_id, :find, :first, :last]
+    delegate :first, :last, to: :sorted
 
     def initialize(target)
       @target = target
@@ -25,31 +26,28 @@ module EnumField
       @sorted.dup
     end
 
+    def [](value)
+      send(value)
+    end
+
     def names
       @name2obj.keys
     end
 
     def find(id)
-      find_by_id(id) or raise EnumField::ObjectNotFound
+      find_by_id(id) || raise(EnumField::ObjectNotFound)
     end
 
     def find_by_id(id)
       case id
-      when Integer, String, Float, Fixnum then
-        @id2obj[id.to_i]
       when Array then
-        id.inject([]) do |items, value|
-          if value && value.respond_to?(:to_i)
-            items << @id2obj[value.to_i]
-          end
-
-          items
+        id.each_with_object([]) do |value, items|
+          items << @id2obj[value.to_i]
         end
+      else
+        @id2obj[id.to_i]
       end
     end
-
-    def first; @sorted.first; end
-    def last; @sorted.last; end
 
     private
 
