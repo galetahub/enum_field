@@ -13,9 +13,9 @@ Gem::Specification.new do |s|
   s.email = 'galeta.igor@gmail.com'
   s.homepage = 'https://github.com/galetahub/enum_field'
 
-  s.files = Dir['{app,lib,config}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.rdoc']
+  s.files = Dir['{app,lib,config}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.md']
   s.test_files = Dir['{spec}/**/*']
-  s.extra_rdoc_files = ['README.rdoc']
+  s.extra_rdoc_files = ['README.md']
   s.require_paths = ['lib']
 
   s.add_dependency 'activesupport'
