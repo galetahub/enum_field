@@ -1,8 +1,6 @@
 # enum_field
 
-* http://github.com/paraseba/enum_field
-
-## DESCRIPTION:
+[![Build Status](https://semaphoreci.com/api/v1/igor-galeta/enum_field/branches/master/badge.svg)](https://semaphoreci.com/igor-galeta/enum_field)
 
 Enables Active Record attributes to point to enum like objects, by saving in your database
 only an integer ID.
@@ -100,9 +98,26 @@ You have some +AR+ like methods in enum classes
 
     PhoneType.find([1, 2]) == [PhoneType.home, PhoneType.commercial]
 
+### Start id from specific number
+
+    class CommentType
+      include EnumField::DefineEnum
+
+      define_enum id_start_from: 100 do
+        member :video
+        member :audio
+        member :text
+      end
+    end
+
+    CommentType.video.id # 101
+    CommentType.audio.id # 102
+    CommentType.text.id  # 103
+
 ## Tests
 
-    rspec ./spec
+    bundle install
+    bundle exec rspec ./spec/
 
 ## LICENSE
 

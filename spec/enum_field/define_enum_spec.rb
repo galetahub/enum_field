@@ -103,4 +103,25 @@ describe EnumField::DefineEnum do
       expect(instance.employee?).to eq false
     end
   end
+
+  context 'id start number' do
+    let(:start_number) { 100 }
+    let(:comment_type) do
+      Class.new(Object) do
+        include EnumField::DefineEnum
+
+        define_enum id_start_from: 100 do
+          member :video
+          member :audio
+          member :text
+        end
+      end
+    end
+
+    it 'must set id + start_number' do
+      expect(comment_type.video.id).to eq start_number + 1
+      expect(comment_type.audio.id).to eq start_number + 2
+      expect(comment_type.text.id).to eq start_number + 3
+    end
+  end
 end

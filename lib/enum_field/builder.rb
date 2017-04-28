@@ -68,10 +68,14 @@ module EnumField
       object
     end
 
-    def find_next_object_id(params)
-      new_id = (params[:id] || @members.size + 1)
+    def find_next_object_id(options)
+      new_id = (options[:id] || generate_next_object_id)
       validate_candidate_id!(new_id)
       new_id
+    end
+
+    def generate_next_object_id
+      @options.fetch(:id_start_from, 0) + @members.size + 1
     end
 
     def validate_candidate_id!(id)
