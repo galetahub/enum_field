@@ -1,37 +1,46 @@
 # encoding: utf-8
+
 module EnumField
   class Builder
-    METHODS = %w(all names find_by_id find first last).freeze
+    METHODS = %w[all names find_by_id find first last ids].freeze
 
-    delegate :first, :last, to: :sorted
+    attr_reader :members
 
-    def initialize(target)
+    def initialize(target, options = {})
       @target = target
-      @next_id = 0
-      @id2obj = {}
-      @name2obj = {}
-      @sorted = []
+      @options = options
+      @members = {}
     end
 
     def member(name, options = {})
-      obj, candidate_id = process_options(options)
-      assign_id(obj, candidate_id)
-      assign_name(obj, name)
-      define_in_meta(name) { obj }
-      save(name, obj)
-      obj.freeze
+      unique_name = name.to_sym
+      @members[unique_name] = create_new_object(unique_name, options)
     end
 
     def all
-      @sorted.dup
+      @members.values
     end
 
     def [](value)
-      send(value)
+      @members[value]
     end
 
     def names
-      @name2obj.keys
+      @members.keys
+    end
+
+    def first
+      key = names.first
+      @members[key]
+    end
+
+    def last
+      key = names.last
+      @members[key]
+    end
+
+    def ids
+      all.map(&:id)
     end
 
     def find(id)
@@ -41,54 +50,33 @@ module EnumField
     def find_by_id(id)
       case id
       when Array then
-        id.each_with_object([]) do |value, items|
-          items << @id2obj[value.to_i]
-        end
+        all.select { |object| id.include?(object.id) }
       else
-        @id2obj[id.to_i]
+        all.detect { |object| object.id == id }
       end
     end
 
     private
 
-    def define_in_meta(name, &block)
-      metaclass = class << @target; self; end
-      metaclass.send(:define_method, name, &block)
+    def create_new_object(name, options)
+      object = (options[:object] || @target.new)
+
+      object.instance_variable_set(:@name, name)
+      object.instance_variable_set(:@id, find_next_object_id(options))
+      object.freeze
+
+      object
     end
 
-    def assign_id(obj, candidate_id)
-      id = new_id(candidate_id)
-      obj.instance_variable_set(:@id, id)
+    def find_next_object_id(params)
+      new_id = (params[:id] || @members.size + 1)
+      validate_candidate_id!(new_id)
+      new_id
     end
 
-    def assign_name(obj, name)
-      obj.instance_variable_set(:@name, name)
-    end
-
-    def new_id(candidate)
-      validate_candidate_id(candidate)
-      candidate || find_next_id
-    end
-
-    def validate_candidate_id(id)
-      raise EnumField::InvalidId.new(id) unless id.nil? || id.is_a?(Integer) && id > 0
-      raise EnumField::RepeatedId.new(id) if @id2obj.has_key?(id)
-    end
-
-    def find_next_id
-      @next_id += 1 while @id2obj.has_key?(@next_id) || @next_id <= 0
-      @next_id
-    end
-
-    def process_options(options)
-      raise EnumField::InvalidOptions unless options.reject {|k,v| k == :object || k == :id}.empty?
-      [options[:object] || @target.new, options[:id]]
-    end
-
-    def save(name, obj)
-      @id2obj[obj.id] = obj
-      @sorted << obj
-      @name2obj[name] = obj
+    def validate_candidate_id!(id)
+      raise EnumField::InvalidId.new(message: id) if id.nil?
+      raise EnumField::RepeatedId.new(message: id) if ids.include?(id)
     end
   end
 end
