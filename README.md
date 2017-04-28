@@ -1,6 +1,7 @@
 # enum_field
 
-[![Build Status](https://semaphoreci.com/api/v1/igor-galeta/enum_field/branches/master/badge.svg)](https://semaphoreci.com/igor-galeta/enum_field)
+[![Build Status](https://semaphoreci.com/api/v1/igor-galeta/enum_field/branches/master/shields_badge.svg)](https://semaphoreci.com/igor-galeta/enum_field)
+[![Code Climate](https://codeclimate.com/github/galetahub/enum_field/badges/gpa.svg)](https://codeclimate.com/github/galetahub/enum_field)
 
 Enables Active Record attributes to point to enum like objects, by saving in your database
 only an integer ID.
@@ -34,85 +35,95 @@ If you are not comfortable with any of this options, maybe +enum_field+ is an an
 
 Define rules:
 
-    class Role
-      include EnumField::DefineEnum
+``` ruby
+class Role
+  include EnumField::DefineEnum
 
-      define_enum do
-        member :admin
-        member :manager
-        member :employee
-      end
-    end
+  define_enum do
+    member :admin
+    member :manager
+    member :employee
+  end
+end
 
-    class User < ActiveRecord::Base
-      extend EnumField::EnumeratedAttribute
+class User < ActiveRecord::Base
+  extend EnumField::EnumeratedAttribute
 
-      # in the database table there is a role_id integer column
-      enumerated_attribute :role
-    end
+  # in the database table there is a role_id integer column
+  enumerated_attribute :role
+end
+```
 
 Usage:
 
-    user.role = Role.manager
-    user.role_id == Role.manager.id  # will be true
+``` ruby
+user.role = Role.manager
+user.role_id == Role.manager.id  # will be true
 
-    Role.manager.name # :manager
-    user.role.name # :manager
+Role.manager.name # :manager
+user.role.name # :manager
 
-    User.first.role.id == User.first.role_id  # will be true
+User.first.role.id == User.first.role_id  # will be true
 
-    Role[:manager] == Role.manager # will be true
+Role[:manager] == Role.manager # will be true
 
-    instance = Role[:employee]
-    instance.admin?    # false
-    instance.employee? # true
+instance = Role[:employee]
+instance.admin?    # false
+instance.employee? # true
+```
 
 Your enum classes can have all the methods you need:
 
-    class PhoneType
-      include EnumField::DefineEnum
+``` ruby
+class PhoneType
+  include EnumField::DefineEnum
 
-      def initialize(name)
-        @name = name
-      end
+  def initialize(name)
+    @name = name
+  end
 
-      define_enum do
-        member :home,       object: new('home')
-        member :commercial, object: new('commercial')
-        member :mobile,     object: new('mobile')
-      end
-    end
+  define_enum do
+    member :home,       object: new('home')
+    member :commercial, object: new('commercial')
+    member :mobile,     object: new('mobile')
+  end
+end
 
-    user.phone.type.name
+user.phone.type.name
+```
 
 You have some +AR+ like methods in enum classes
 
-    PhoneType.all == [PhoneType.home, PhoneType.commercial, PhoneType.mobile]  # ordered all
-    PhoneType.first == PhoneType.home
-    PhoneType.last == PhoneType.mobile
+``` ruby
+PhoneType.all == [PhoneType.home, PhoneType.commercial, PhoneType.mobile]  # ordered all
+PhoneType.first == PhoneType.home
+PhoneType.last == PhoneType.mobile
 
-    PhoneType.find_by_id(PhoneType.home.id) == PhoneType.home
-    PhoneType.find_by_id(123456) == nil
-    PhoneType.find(2) == PhoneType.commercial
-    PhoneType.find(123456)  # will raise
+PhoneType.find_by_id(PhoneType.home.id) == PhoneType.home
+PhoneType.find_by_id(123456) == nil
+PhoneType.find(2) == PhoneType.commercial
+PhoneType.find(123456)  # will raise
 
-    PhoneType.find([1, 2]) == [PhoneType.home, PhoneType.commercial]
+PhoneType.find([1, 2]) == [PhoneType.home, PhoneType.commercial]
+```
 
 ### Start id from specific number
 
-    class CommentType
-      include EnumField::DefineEnum
+``` ruby
+class CommentType
+  include EnumField::DefineEnum
 
-      define_enum id_start_from: 100 do
-        member :video
-        member :audio
-        member :text
-      end
-    end
+  define_enum id_start_from: 100 do
+    member :video
+    member :audio
+    member :text
+  end
+end
 
-    CommentType.video.id # 101
-    CommentType.audio.id # 102
-    CommentType.text.id  # 103
+CommentType.video.id # 101
+CommentType.audio.id # 102
+CommentType.text.id  # 103
+```
 
 ## Tests
 
