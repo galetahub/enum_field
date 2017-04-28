@@ -66,6 +66,7 @@ user.role.name # :manager
 User.first.role.id == User.first.role_id  # will be true
 
 Role[:manager] == Role.manager # will be true
+Role['manager'] == Role.manager # will be true
 
 instance = Role[:employee]
 instance.admin?    # false

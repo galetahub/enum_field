@@ -13,7 +13,7 @@ module EnumField
     end
 
     def member(name, options = {})
-      unique_name = name.to_sym
+      unique_name = normalize_name(name)
       @members[unique_name] = create_new_object(unique_name, options)
     end
 
@@ -22,7 +22,8 @@ module EnumField
     end
 
     def [](value)
-      @members[value]
+      unique_name = normalize_name(value)
+      @members[unique_name]
     end
 
     def names
@@ -81,6 +82,10 @@ module EnumField
     def validate_candidate_id!(id)
       raise EnumField::InvalidId.new(message: id) if id.nil?
       raise EnumField::RepeatedId.new(message: id) if ids.include?(id)
+    end
+
+    def normalize_name(value)
+      value.to_s.to_sym
     end
   end
 end

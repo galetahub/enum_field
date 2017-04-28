@@ -36,7 +36,7 @@ module EnumField
         end
 
         define_singleton_method '[]' do |value|
-          @enum_builder.members[value]
+          @enum_builder[value]
         end
 
         @enum_builder.members.freeze

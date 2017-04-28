@@ -18,6 +18,7 @@ describe EnumField::DefineEnum do
     expect(Role.admin.name).to eq :admin
 
     expect(Role[:admin]).to eq(Role.admin)
+    expect(Role['admin']).to eq(Role.admin)
   end
 
   context 'static' do
