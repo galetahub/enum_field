@@ -125,4 +125,31 @@ describe EnumField::DefineEnum do
       expect(comment_type.text.id).to eq start_number + 3
     end
   end
+
+  context 'custom objects' do
+    let(:start_number) { 100 }
+    let(:figure_type) do
+      Class.new(Object) do
+        include EnumField::DefineEnum
+
+        attr_reader :size
+
+        def initialize(size)
+          @size = size
+        end
+
+        define_enum do
+          member :straight, object: new(10)
+          member :pear, object: new(20)
+          member :spoon, object: new(30)
+        end
+      end
+    end
+
+    it 'must set size attribute' do
+      expect(figure_type.straight.size).to eq 10
+      expect(figure_type.straight.name).to eq :straight
+      expect(figure_type.straight.id).to eq 1
+    end
+  end
 end

@@ -57,6 +57,18 @@ module EnumField
       end
     end
 
+    def method_missing(method_name, *args, &block)
+      if @target.respond_to?(method_name)
+        @target.send(method_name, *args, &block)
+      else
+        super
+      end
+    end
+
+    def respond_to_missing?(method_name, include_private = false)
+      @target.respond_to?(method_name) || super
+    end
+
     private
 
     def create_new_object(name, options)
