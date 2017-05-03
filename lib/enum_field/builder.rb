@@ -2,7 +2,7 @@
 
 module EnumField
   class Builder
-    METHODS = %w[all names find_by_id find first last ids].freeze
+    METHODS = %w[all names find_by_id find first last ids valid_id?].freeze
 
     attr_reader :members
 
@@ -44,6 +44,10 @@ module EnumField
       all.map(&:id)
     end
 
+    def valid_id?(value)
+      !value.nil? && ids.include?(value)
+    end
+
     def find(id)
       find_by_id(id) || raise(EnumField::ObjectNotFound)
     end
@@ -67,6 +71,11 @@ module EnumField
 
     def respond_to_missing?(method_name, include_private = false)
       @target.respond_to?(method_name) || super
+    end
+
+    def freeze!
+      @members.freeze
+      freeze
     end
 
     private

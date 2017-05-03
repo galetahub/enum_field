@@ -79,18 +79,21 @@ Your enum classes can have all the methods you need:
 class PhoneType
   include EnumField::DefineEnum
 
-  def initialize(name)
-    @name = name
+  attr_reader :prefix
+
+  def initialize(prefix)
+    @prefix = prefix
   end
 
   define_enum do
-    member :home,       object: new('home')
-    member :commercial, object: new('commercial')
-    member :mobile,     object: new('mobile')
+    member :home,       object: new('045')
+    member :commercial, object: new('044')
+    member :mobile,     object: new('+380')
   end
 end
 
-user.phone.type.name
+user.phone_type.prefix # +380
+user.phone_type.name   # :mobile
 ```
 
 You have some +AR+ like methods in enum classes
@@ -124,6 +127,17 @@ end
 CommentType.video.id # 101
 CommentType.audio.id # 102
 CommentType.text.id  # 103
+```
+
+### Check if id exists
+
+``` ruby
+CommentType.valid_id?(-1)    # false
+CommentType.valid_id?(0)     # false
+CommentType.valid_id?(nil)   # false
+CommentType.valid_id?(1)     # false
+CommentType.valid_id?('101') # false
+CommentType.valid_id?(101)   # true
 ```
 
 ## Tests

@@ -124,6 +124,16 @@ describe EnumField::DefineEnum do
       expect(comment_type.audio.id).to eq start_number + 2
       expect(comment_type.text.id).to eq start_number + 3
     end
+
+    it 'must check valid id' do
+      expect(comment_type.valid_id?(-1)).to eq false
+      expect(comment_type.valid_id?(0)).to eq false
+      expect(comment_type.valid_id?(nil)).to eq false
+      expect(comment_type.valid_id?(1)).to eq false
+      expect(comment_type.valid_id?('101')).to eq false
+
+      expect(comment_type.valid_id?(101)).to eq true
+    end
   end
 
   context 'custom objects' do
@@ -132,7 +142,7 @@ describe EnumField::DefineEnum do
       Class.new(Object) do
         include EnumField::DefineEnum
 
-        attr_reader :size
+        attr_accessor :size
 
         def initialize(size)
           @size = size
@@ -150,6 +160,10 @@ describe EnumField::DefineEnum do
       expect(figure_type.straight.size).to eq 10
       expect(figure_type.straight.name).to eq :straight
       expect(figure_type.straight.id).to eq 1
+    end
+
+    it 'must freeze objects' do
+      expect { figure_type.pear.size = 100 }.to raise_error(RuntimeError)
     end
   end
 end

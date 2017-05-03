@@ -25,9 +25,9 @@ module EnumField
           end
         end
 
-        @enum_builder.members.keys.each do |method|
+        @enum_builder.names.each do |method|
           define_singleton_method method do
-            @enum_builder.members[method]
+            @enum_builder[method]
           end
 
           define_method "#{method}?" do
@@ -39,7 +39,7 @@ module EnumField
           @enum_builder[value]
         end
 
-        @enum_builder.members.freeze
+        @enum_builder.freeze!
       end
     end
 
