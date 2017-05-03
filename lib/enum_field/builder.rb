@@ -2,7 +2,7 @@
 
 module EnumField
   class Builder
-    METHODS = %w[all names find_by_id find first last ids valid_id?].freeze
+    METHODS = %w[all names find_by_id find first last ids valid_id? valid_name?].freeze
 
     attr_reader :members
 
@@ -46,6 +46,10 @@ module EnumField
 
     def valid_id?(value)
       !value.nil? && ids.include?(value)
+    end
+
+    def valid_name?(value)
+      !value.nil? && names.include?(normalize_name(value))
     end
 
     def find(id)

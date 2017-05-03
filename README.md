@@ -140,6 +140,18 @@ CommentType.valid_id?('101') # false
 CommentType.valid_id?(101)   # true
 ```
 
+### Check if name exists
+
+``` ruby
+CommentType.valid_name?('video')    # true
+CommentType.valid_name?(:video)     # true
+
+CommentType.valid_name?(nil)     # false
+CommentType.valid_name?(1)       # false
+CommentType.valid_name?('wrong') # false
+CommentType.valid_name?(:wrong)  # false
+```
+
 ## Tests
 
     bundle install

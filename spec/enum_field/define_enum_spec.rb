@@ -134,6 +134,17 @@ describe EnumField::DefineEnum do
 
       expect(comment_type.valid_id?(101)).to eq true
     end
+
+    it 'must check valid name' do
+      expect(comment_type.valid_name?('video')).to eq true
+      expect(comment_type.valid_name?(:video)).to eq true
+
+      expect(comment_type.valid_name?(nil)).to eq false
+      expect(comment_type.valid_name?(0)).to eq false
+      expect(comment_type.valid_name?(101)).to eq false
+      expect(comment_type.valid_name?('wrong')).to eq false
+      expect(comment_type.valid_name?(:not_exist)).to eq false
+    end
   end
 
   context 'custom objects' do
