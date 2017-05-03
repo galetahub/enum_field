@@ -6,11 +6,11 @@
 Enables Active Record attributes to point to enum like objects, by saving in your database
 only an integer ID.
 
-## INSTALL:
+## Install
 
     gem 'galetahub-enum_field', require: 'enum_field'
 
-## FEATURES:
+## Features
 
 * Allows creation of Classes with enum like behaviour.
 * Allows any number of members and methods in the enum classes.
@@ -20,7 +20,7 @@ only an integer ID.
   * <code>if user.role.can_edit?</code>
 * Saves in your +AR+ tables, only an integer id pointing to the enumeration member.
 
-## SYNOPSIS:
+## Synopsis
 
 When in an Active Record class, you have an attribute like role, state or country you have
 several options.
@@ -31,7 +31,7 @@ several options.
 
 If you are not comfortable with any of this options, maybe +enum_field+ is an answer for you.
 
-## BASIC USAGE:
+## Basic usage
 
 Define rules:
 
@@ -137,14 +137,16 @@ CommentType.valid_id?(0)     # false
 CommentType.valid_id?(nil)   # false
 CommentType.valid_id?(1)     # false
 CommentType.valid_id?('101') # false
+CommentType.valid_id?(:text) # false
+
 CommentType.valid_id?(101)   # true
 ```
 
 ### Check if name exists
 
 ``` ruby
-CommentType.valid_name?('video')    # true
-CommentType.valid_name?(:video)     # true
+CommentType.valid_name?('video') # true
+CommentType.valid_name?(:video)  # true
 
 CommentType.valid_name?(nil)     # false
 CommentType.valid_name?(1)       # false

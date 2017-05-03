@@ -131,6 +131,7 @@ describe EnumField::DefineEnum do
       expect(comment_type.valid_id?(nil)).to eq false
       expect(comment_type.valid_id?(1)).to eq false
       expect(comment_type.valid_id?('101')).to eq false
+      expect(comment_type.valid_id?(:text)).to eq false
 
       expect(comment_type.valid_id?(101)).to eq true
     end
