@@ -61,11 +61,14 @@ user.role = Role.manager
 user.role_id == Role.manager.id  # will be true
 
 Role.manager.name # :manager
-user.role.name # :manager
+user.role.name    # :manager
+
+Role.names # [:admin, :manager, :employee]
+Role.ids   # [1, 2, 3]
 
 User.first.role.id == User.first.role_id  # will be true
 
-Role[:manager] == Role.manager # will be true
+Role[:manager]  == Role.manager # will be true
 Role['manager'] == Role.manager # will be true
 
 instance = Role[:employee]
