@@ -17,7 +17,7 @@ module EnumField
     module ClassMethods
       def define_enum(options = {}, &block)
         @enum_builder ||= EnumField::Builder.new(self, options)
-        @enum_builder.instance_exec(&block)
+        @enum_builder.instance_exec(&block) unless @enum_builder.frozen?
 
         EnumField::Builder::METHODS.each do |method|
           define_singleton_method method do |*args, &method_block|

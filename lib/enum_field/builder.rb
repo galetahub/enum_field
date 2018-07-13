@@ -14,7 +14,7 @@ module EnumField
 
     def member(name, options = {})
       unique_name = normalize_name(name)
-      @members[unique_name] = create_new_object(unique_name, options)
+      @members[unique_name] ||= create_new_object(unique_name, options)
     end
 
     def all
