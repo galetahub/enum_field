@@ -54,7 +54,7 @@ module EnumField
       end
 
       define_method("#{name_attribute}=") do |value|
-        raw = value ? value.id : nil
+        raw = EnumField::AttributeValueResolver.new(value, klass).resolve
         send("#{id_attribute}=", raw)
       end
     end
