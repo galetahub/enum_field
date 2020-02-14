@@ -40,6 +40,12 @@ describe EnumField::DefineEnum do
       expect(Role.find_by_id(3)).to eq Role.employee
     end
 
+    it 'must safe_find one instance' do
+      expect(Role.safe_find(1)).to eq Role.admin
+      expect(Role.safe_find(2)).to eq Role.manager
+      expect(Role.safe_find(3)).to eq Role.employee
+    end
+
     it 'must find_by_id array of instances' do
       expect(Role.find_by_id([2, 3])).to eq [Role.manager, Role.employee]
       expect(Role.find_by_id([nil, 1])).to eq [Role.admin]

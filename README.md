@@ -107,7 +107,9 @@ PhoneType.first == PhoneType.home
 PhoneType.last == PhoneType.mobile
 
 PhoneType.find_by_id(PhoneType.home.id) == PhoneType.home
-PhoneType.find_by_id(123456) == nil
+PhoneType.find_by_id(123456) == nil # will not raise if id does not exists
+PhoneType.safe_find(123456) == nil # just alias for find_by_id
+
 PhoneType.find(2) == PhoneType.commercial
 PhoneType.find(123456)  # will raise
 

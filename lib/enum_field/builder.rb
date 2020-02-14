@@ -2,7 +2,7 @@
 
 module EnumField
   class Builder
-    METHODS = %w[all names find_by_id find first last ids valid_id? valid_name?].freeze
+    METHODS = %w[all names find_by_id find first last ids valid_id? valid_name? safe_find].freeze
 
     attr_reader :members
 
@@ -64,6 +64,7 @@ module EnumField
         all.detect { |object| object.id == id }
       end
     end
+    alias safe_find find_by_id
 
     def method_missing(method_name, *args, &block)
       if @target.respond_to?(method_name)
