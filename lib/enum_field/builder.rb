@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module EnumField
   class Builder
@@ -58,7 +58,7 @@ module EnumField
 
     def find_by_id(id)
       case id
-      when Array then
+      when Array
         all.select { |object| id.include?(object.id) }
       else
         all.detect { |object| object.id == id }

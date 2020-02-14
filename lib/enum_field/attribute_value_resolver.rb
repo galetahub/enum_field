@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EnumField
   class AttributeValueResolver
     attr_reader :value, :klass
@@ -18,7 +20,7 @@ module EnumField
     private
 
     def value_is_member?
-      value && value.respond_to?(:id)
+      value&.respond_to?(:id)
     end
 
     def value_is_member_name?

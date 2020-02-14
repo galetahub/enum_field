@@ -1,11 +1,12 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 require File.join(File.dirname(__FILE__), 'lib', 'enum_field', 'version')
 
 desc 'Default: run unit tests.'
-task :default => :test
+task default: :test
 
 desc 'Test the enum_field plugin.'
 Rake::TestTask.new(:test) do |t|

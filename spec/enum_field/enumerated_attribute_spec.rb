@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe EnumField::EnumeratedAttribute do
@@ -35,8 +37,8 @@ describe EnumField::EnumeratedAttribute do
   end
 
   it 'must set role_type_id' do
-    expect {
+    expect do
       admin_user.role_type = new_role
-    }.to change { admin_user.role_type_id }.from(RoleType.admin.id).to(new_role.id)
+    end.to change { admin_user.role_type_id }.from(RoleType.admin.id).to(new_role.id)
   end
 end
